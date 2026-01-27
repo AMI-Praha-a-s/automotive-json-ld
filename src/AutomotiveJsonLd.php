@@ -180,7 +180,7 @@ class AutomotiveJsonLd {
             $offerObj->warranty($warrantyObj);
         }
 
-        return $offerObj->toScript();
+        return $this->safeToScript($offerObj);
     }
 
     public function generateDetailPageJsonLd()
@@ -198,7 +198,7 @@ class AutomotiveJsonLd {
         // TODO: we should mark one of the object in configuration as the main -> will be echoed to a script in the page
         if (isset($objects['car']) && is_object($objects['car'])) {
             try {
-                $script = $objects['car']->toScript();
+                $script = $this->safeToScript($objects['car']);
 
                 // Check if this should be multi-type and fix it
                 if (isset($detailConfig['elements']['car']['multi_type']) && is_array($detailConfig['elements']['car']['multi_type'])) {
@@ -229,7 +229,7 @@ class AutomotiveJsonLd {
 
             if ($data && isset($data['@type'])) {
                 $data['@type'] = $types;
-                $newJson = json_encode($data, JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE);
+                $newJson = $this->safeJsonEncode($data);
                 return '<script type="application/ld+json">' . $newJson . '</script>';
             }
         }
@@ -700,7 +700,7 @@ class AutomotiveJsonLd {
 
         if (!empty($listItems)) {
             $breadcrumbList->itemListElement($listItems);
-            return $breadcrumbList->toScript();
+            return $this->safeToScript($breadcrumbList);
         }
 
         return '';
@@ -1030,8 +1030,10 @@ class AutomotiveJsonLd {
             }
         }
 
-        // Fallback to capitalize the slug
-        return ucfirst(str_replace('-', ' ', $filterValue));
+        // Fallback to capitalize the slug - sanitize to prevent XSS
+        // Allow alphanumeric, spaces, hyphens, and Czech/European diacritics
+        $sanitized = preg_replace('/[^a-zA-Z0-9\s\-áčďéěíňóřšťúůýžÁČĎÉĚÍŇÓŘŠŤÚŮÝŽäëïöüÄËÏÖÜàâæçèêîôùûÀÂÆÇÈÊÎÔÙÛñÑßőűŐŰ]/u', '', $filterValue);
+        return ucfirst(str_replace('-', ' ', $sanitized));
     }
 
     private function getPagetypeFromCarType($carTypeSlug)
@@ -1096,6 +1098,32 @@ class AutomotiveJsonLd {
     }
 
     /**
+     * Safely encode data to JSON with XSS protection
+     *
+     * @param array $data
+     * @return string
+     */
+    private function safeJsonEncode(array $data): string
+    {
+        return json_encode(
+            $data,
+            JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES | JSON_HEX_TAG | JSON_HEX_AMP | JSON_HEX_APOS | JSON_HEX_QUOT
+        );
+    }
+
+    /**
+     * Wrap Schema.org toScript() with XSS-safe encoding
+     *
+     * @param mixed $schemaObject
+     * @return string
+     */
+    private function safeToScript($schemaObject): string
+    {
+        $data = $schemaObject->toArray();
+        return '<script type="application/ld+json">' . $this->safeJsonEncode($data) . '</script>';
+    }
+
+    /**
      * Generate ItemList JSON-LD for car listing pages
      *
      * @param array $cars Array of car objects from listing page
@@ -1141,7 +1169,7 @@ class AutomotiveJsonLd {
 
             if (!empty($listItems)) {
                 $itemList->itemListElement($listItems);
-                $script = $itemList->toScript();
+                $script = $this->safeToScript($itemList);
 
                 // Fix multi-type for all Car items in the list
                 $script = $this->fixMultiTypeInItemList($script);
@@ -1178,7 +1206,7 @@ class AutomotiveJsonLd {
                 }
                 unset($listItem); // Break reference
 
-                $newJson = json_encode($data, JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE);
+                $newJson = $this->safeJsonEncode($data);
                 return '<script type="application/ld+json">' . $newJson . '</script>';
             }
         }
