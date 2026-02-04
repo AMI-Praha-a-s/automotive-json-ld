@@ -1,12 +1,12 @@
 {
-    "name": "bestfitcz/automotive-json-ld",
+    "name": "ami-praha/automotive-json-ld",
     "description": "A Laravel package to help to generate json-ld scripts",
     "keywords": [
-        "bestfitcz",
+        "ami-praha",
         "laravel",
         "automotive-json-ld"
     ],
-    "homepage": "https://github.com/bestfitcz/automotive-json-ld",
+    "homepage": "https://github.com/AMI-Praha-a-s/automotive-json-ld",
     "license": "MIT",
     "authors": [
         {
@@ -24,7 +24,7 @@
     },
     "autoload": {
         "psr-4": {
-            "Bestfitcz\\AutomotiveJsonLd\\": "src/"
+            "AmiPraha\\AutomotiveJsonLd\\": "src/"
         }
     },
     "config": {
@@ -33,10 +33,10 @@
     "extra": {
         "laravel": {
             "providers": [
-                "Bestfitcz\\AutomotiveJsonLd\\AutomotiveJsonLdServiceProvider"
+                "AmiPraha\\AutomotiveJsonLd\\AutomotiveJsonLdServiceProvider"
             ],
             "aliases": {
-                "AutomotiveJsonLd": "Bestfitcz\\AutomotiveJsonLd\\Facades\\AutomotiveJsonLd"
+                "AutomotiveJsonLd": "AmiPraha\\AutomotiveJsonLd\\Facades\\AutomotiveJsonLd"
             }
         }
     },
