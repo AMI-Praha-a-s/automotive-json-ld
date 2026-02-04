@@ -1,6 +1,6 @@
 <?php
 
-// config for Bestfitcz/AutomotiveJsonLd
+// config for AmiPraha/AutomotiveJsonLd
 return [
     'breadcrumb' => [
         'items' => [
