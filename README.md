@@ -20,7 +20,7 @@ We highly appreciate you sending us a postcard from your hometown, mentioning wh
 You can install the package via composer:
 
 ```bash
-composer require bestfitcz/automotive-json-ld
+composer require ami-praha/automotive-json-ld
 ```
 
 You can publish and run the migrations with:
@@ -52,7 +52,7 @@ php artisan vendor:publish --tag="automotive-json-ld-views"
 ## Usage
 
 ```php
-$automotiveJsonLd = new Bestfitcz\AutomotiveJsonLd();
+$automotiveJsonLd = new AmiPraha\AutomotiveJsonLd();
 echo $automotiveJsonLd->echoPhrase('Hello, Bestfitcz!');
 ```
 
