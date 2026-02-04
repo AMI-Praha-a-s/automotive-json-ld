@@ -47,7 +47,7 @@ composer test
 
 ### Installation Commands
 ```bash
-composer require bestfitcz/automotive-json-ld
+composer require ami-praha/automotive-json-ld
 php artisan vendor:publish --tag="automotive-json-ld-migrations"
 php artisan migrate
 php artisan vendor:publish --tag="automotive-json-ld-config"
