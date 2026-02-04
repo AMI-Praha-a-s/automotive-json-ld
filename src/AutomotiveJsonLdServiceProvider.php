@@ -1,6 +1,6 @@
 <?php
 
-namespace Bestfitcz\AutomotiveJsonLd;
+namespace AmiPraha\AutomotiveJsonLd;
 
 use Illuminate\Support\ServiceProvider;
 
